@@ -1,0 +1,42 @@
+﻿@page "/productos"
+
+@using Data
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using SistemaComedor.Models
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Htpp
+
+<h3>Productos</h3>
+
+<table class="table">
+        @if (productoList != null)
+        {
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in productoList)
+                {
+                    <tr>
+                        <td>@producto.idProducto</td>
+                        <td>@producto.nombre</td>
+                        <td>@producto.precioVenta</td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+
+
+@code {
+    public string Url = "https://localhost:44319/api/Producto";
+    List<Producto> productoList = new List<Producto>();
+    protected override async Task OnInitializedAsync() =>
+        productoList = await Htpp.GetFromJsonAsync<List<Producto>>(Url);
+}
